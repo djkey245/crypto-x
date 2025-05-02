@@ -3,6 +3,7 @@
 namespace App\Application\Jobs;
 
 use App\Domain\News\Models\Account;
+use App\Domain\News\Repositories\TweetRepositoryInterface;
 use App\Domain\News\Services\TweetParserService;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
@@ -17,14 +18,17 @@ class FetchTweetsJob implements ShouldQueue
      * Create a new job instance.
      */
     public function __construct(private readonly Account $account)
-    {}
+    {
+    }
 
     /**
      * Execute the job.
      */
-    public function handle(): void
+    public function handle(TweetRepositoryInterface $tweetRepository): void
     {
-        $parserService = app(TweetParserService::class);
-        $result = $parserService->fetch($this->account);
+        $parserService = new TweetParserService($this->account);
+        $tweetDTOs = $parserService->fetch();
+        $tweetRepository->bulkSaveFromDTOs($tweetDTOs);
+        echo "\n $this->account Success";
     }
 }

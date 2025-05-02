@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('tweet_id')->unique();
             $table->string('account_id');
-            $table->string('text');
+            $table->text('text');
             $table->string('url')->nullable();
             $table->string('source')->nullable()->default('X');
             $table->timestamp('posted_at')->nullable();

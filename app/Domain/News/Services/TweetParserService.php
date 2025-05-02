@@ -12,9 +12,14 @@ use Symfony\Component\DomCrawler\Crawler;
 
 class TweetParserService
 {
-    public function fetch(Account $account, $limit = 5): array
+
+    public function __construct(private readonly Account $account)
     {
-        $url = "https://nitter.privacydev.net/{$account->nickname}";
+    }
+
+    public function fetch($limit = 5): array
+    {
+        $url = "https://nitter.privacydev.net/{$this->account->nickname}";
 
         $html = Http::withHeaders([
             'User-Agent' => 'Mozilla/5.0 (compatible; Bot/1.0)',
@@ -42,7 +47,7 @@ class TweetParserService
 
             $timestamp = $node->filter('span.tweet-date a')->attr('title') ?? '';
 
-            $tweets[] = new TweetDTO($tweetId, $url, $text, Carbon::parse(str_replace('·', '', $timestamp)));
+            $tweets[] = new TweetDTO($tweetId, $url, $text, 'X', $this->account, Carbon::parse(str_replace('·', '', $timestamp)));
         });
         return $tweets;
     }

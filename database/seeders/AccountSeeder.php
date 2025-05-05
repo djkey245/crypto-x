@@ -40,15 +40,15 @@ class AccountSeeder extends Seeder
         foreach ($investors as $nickname) {
             Account::firstOrCreate(['nickname' => $nickname], ['type' => 'investor']);
         }
-        foreach ($projects as $nickname) {
-            Account::firstOrCreate(['nickname' => $nickname], ['type' => 'project']);
-        }
-        foreach ($educational as $nickname) {
-            Account::firstOrCreate(['nickname' => $nickname], ['type' => 'educational']);
-        }
-        foreach ($analytical as $nickname) {
-            Account::firstOrCreate(['nickname' => $nickname], ['type' => 'analytical']);
-        }
+//        foreach ($projects as $nickname) {
+//            Account::firstOrCreate(['nickname' => $nickname], ['type' => 'project']);
+//        }
+//        foreach ($educational as $nickname) {
+//            Account::firstOrCreate(['nickname' => $nickname], ['type' => 'educational']);
+//        }
+//        foreach ($analytical as $nickname) {
+//            Account::firstOrCreate(['nickname' => $nickname], ['type' => 'analytical']);
+//        }
 
     }
 }

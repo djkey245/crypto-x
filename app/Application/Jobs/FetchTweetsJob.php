@@ -27,8 +27,8 @@ class FetchTweetsJob implements ShouldQueue
     public function handle(TweetRepositoryInterface $tweetRepository): void
     {
         $parserService = new TweetParserService($this->account);
-        $tweetDTOs = $parserService->fetch();
+        $twitterPage = $parserService->fetch();
+        $tweetDTOs = $parserService->parse($twitterPage);
         $tweetRepository->bulkSaveFromDTOs($tweetDTOs);
-        echo "\n $this->account Success";
     }
 }

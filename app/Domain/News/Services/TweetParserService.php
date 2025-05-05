@@ -13,22 +13,21 @@ use Symfony\Component\DomCrawler\Crawler;
 class TweetParserService
 {
 
+    protected string $url;
+
     public function __construct(private readonly Account $account)
     {
+        $this->url = "https://nitter.privacydev.net/{$this->account->nickname}";
     }
 
-    public function fetch($limit = 5): array
+    public function fetch(): string
     {
-        $url = "https://nitter.privacydev.net/{$this->account->nickname}";
-
-        $html = Http::withHeaders([
+        return Http::withHeaders([
             'User-Agent' => 'Mozilla/5.0 (compatible; Bot/1.0)',
-        ])->timeout(10)->get($url)->body();
-
-        return $this->parse($html, $limit);
+        ])->timeout(10)->get($this->url)->body();
     }
 
-    private function parse(string $html, int $limit): array
+    public function parse(string $html, int $limit = 5): array
     {
         $crawler = new Crawler($html);
         $tweets = [];
@@ -49,6 +48,7 @@ class TweetParserService
 
             $tweets[] = new TweetDTO($tweetId, $url, $text, 'X', $this->account, Carbon::parse(str_replace('·', '', $timestamp)));
         });
+
         return $tweets;
     }
 }
